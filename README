@@ -1,11 +1,14 @@
 kvc-openafs-kmod
 
 
-This is a kmods-via-containers implementation for the openafs-kmod. More information on kmod-via-container can be got from  kmods-via-containers README.  
+This is a kmods-via-containers implementation for the openafs-kmod. More information on kmod-via-container can be got from  
+kmods-via-container (https://github.com/kmods-via-containers/kmods-via-containers) README.  
 
 For OpenAFS specific step:
 
-1. copy ThisCell, CellServDB, krb5.conf and cacheinfo for Cell in current location. On RHCOS nodes root filesystem is readonly. So afs will be mounted on /var/afs. Also cache dir is in /var/afscache. While starting AFS we mount /var on host in /openafs inside container, so cacheinfo will have below entry
+1. copy ThisCell, CellServDB, krb5.conf and cacheinfo for Cell in current location. On RHCOS nodes root filesystem is readonly.
+So afs will be mounted on /var/afs. Also cache dir is in /var/afscache. While starting AFS we mount /var on host in /openafs 
+inside container, so cacheinfo will have below entry
 
 cacheinfo:
 
@@ -18,3 +21,5 @@ tar -czf subs.tar.gz /etc/pki/entitlement/ /etc/rhsm/ /etc/yum.repos.d/redhat.re
 3. Once above steps are done run ./createmc.sh script. It will create machine config manifest i.e mc.yaml file
 
 4. Then apply machine config which makes machine config operator in OpenShift to install OpenAFS on all worker nodes.
+  
+  oc create -f mc.yaml
