@@ -1,0 +1,23 @@
+FROM registry.access.redhat.com/ubi8:latest
+MAINTAINER "Yadavendra Yadav"
+WORKDIR /build/
+#RUN subscription-manager register --username ${SUBS_USER} --password ${SUBS_PASS} --auto-attach
+# First update the base container to latest versions of everything
+RUN yum update -y
+
+RUN yum install -y bzip2 git
+RUN git clone git://git.openafs.org/openafs.git
+
+# Expecting kernel version as an input to the build
+ARG KVER
+# Prep and build the module
+RUN yum install -y make sudo
+RUN yum install -y gcc kernel-{core,devel,modules}-${KVER} elfutils-libelf-devel
+RUN yum install -y libtool which
+RUN yum install -y krb5-devel autoconf flex bison libcap-devel
+RUN cd openafs && sh regen.sh
+RUN cd openafs && [[ $(arch) = x86_64 ]] && sys=amd64_linux26 || sys=$(arch)_linux26 && sh ./regen.sh && ./configure --with-afs-sysname=${sys} --prefix=/usr --libdir=/usr/lib64 --bindir=/usr/bin --sbindir=/usr/sbin --enable-kauth --enable-debug --enable-fuse-client --with-linux-kernel-headers=/lib/modules/${KVER}/build --with-krb5 --enable-redhat-buildsys --enable-kauth --enable-transarc-paths --enable-kernel-module --with-linux-kernel-packaging
+RUN cd openafs && make all 
+RUN cd openafs && make install
+ADD startStopAFS.sh /usr/vice/etc/startStopAFS.sh
+RUN chmod 777 /usr/vice/etc/startStopAFS.sh
