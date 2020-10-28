@@ -5,8 +5,8 @@ This is a kmods-via-containers implementation for the openafs-kmod. More informa
 
 OpenAFS specific step:
 
-1. Copy ThisCell, CellServDB, krb5.conf and cacheinfo for cell inside kvc-openafs-kmod directory. On RHCOS nodes root filesystem is readonly, So afs will be mounted on /var/afs. Also cache dir is in /var/afscache. While starting AFS we mount /var on host in /openafs 
-inside container, e.g. cacheinfo will have below entry
+1. Copy ThisCell, CellServDB, krb5.conf and cacheinfo for cell inside kvc-openafs-kmod directory. On RHCOS nodes root filesystem is readonly, So afs will be mounted on /var/afs. Also cache dir is in /var/afscache. 
+While starting AFS we mount /var on host in /openafs inside container, e.g. cacheinfo will have below entry
 
 cacheinfo:
 
