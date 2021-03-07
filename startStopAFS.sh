@@ -28,14 +28,13 @@ if [ $operation = "start" ]; then
 	cp /openafs/cacheinfo /usr/vice/etc
 	koloc=$(find /build -name openafs.ko)
 	cp ${koloc} /lib/modules/${kversion}/
-	depmod -a
 	if [ ! -d "/openafs/afscache" ]; then
 		mkdir /openafs/afscache
 	fi
 	if [ ! -d "/openafs/afs" ]; then
 		mkdir /openafs/afs
 	fi
-	modprobe openafs
+	insmod /lib/modules/${kversion}/extra/openafs/openafs.ko
 	/build/openafs/src/afsd/afsd -stat 100000 -daemons 12 -volumes 1536 -chunksize 20 -files 115000 -dcache 25000 -disable-dynamic-vcaches -mountdir /openafs/afs
         sleep 10
 	exit 0
