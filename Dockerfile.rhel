@@ -8,7 +8,7 @@ ENV HTTPS_PROXY=$HTTPS_PROXY
 RUN yum update -y
 
 RUN yum install -y bzip2 git
-RUN if [[ -z "$http_proxy" ]]; then git clone https://github.com/openafs/openafs.git; else git clone git://git.openafs.org/openafs.git; fi
+RUN if [[ ! -z "$http_proxy" ]]; then git clone https://github.com/openafs/openafs.git; else git clone git://git.openafs.org/openafs.git; fi
 # Expecting kernel version as an input to the build
 ARG KVER
 # Prep and build the module
