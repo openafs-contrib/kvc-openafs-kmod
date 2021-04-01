@@ -56,11 +56,25 @@ IMAGE="${KVC_SOFTWARE_NAME}:${KVC_KVER}"
 
 build_kmod_container() {
     echo "Building ${IMAGE} kernel module container..."
-    kvc_c_build -t ${IMAGE}                              \
-        --file ${KMOD_CONTAINER_BUILD_FILE}          \
-        --label="name=${KVC_SOFTWARE_NAME}"          \
-        --build-arg KVER=${KVC_KVER}                 \
-        ${KMOD_CONTAINER_BUILD_CONTEXT}
+    [[ !-z $HTTP_PROXY ]] && export http_proxy=$HTTP_PROXY
+    [[ !-z $HTTPS_PROXY ]] && export https_proxy=$HTTPS_PROXY
+
+    if [[ -z "$HTTP_PROXY" ]] && [[ -z "$HTTPS_PROXY" ]]; then
+	    kvc_c_build -t ${IMAGE}                              \
+	        --file ${KMOD_CONTAINER_BUILD_FILE}          \
+	        --label="name=${KVC_SOFTWARE_NAME}"          \
+	        --build-arg KVER=${KVC_KVER}                 \
+	        ${KMOD_CONTAINER_BUILD_CONTEXT}
+    else
+	    kvc_c_build -t ${IMAGE}                              \
+	        --file ${KMOD_CONTAINER_BUILD_FILE}          \
+	        --label="name=${KVC_SOFTWARE_NAME}"          \
+	        --build-arg KVER=${KVC_KVER}                 \
+	        --build-arg http_proxy=1 		     \
+                --build-arg HTTP_PROXY=$HTTP_PROXY           \
+                --build-arg HTTPS_PROXY=$HTTPS_PROXY         \
+	        ${KMOD_CONTAINER_BUILD_CONTEXT}
+    fi
 
     # get rid of any dangling containers if they exist
     echo "Checking for old kernel module images that need to be recycled"

@@ -1,13 +1,14 @@
 FROM registry.access.redhat.com/ubi8:latest
 MAINTAINER "Yadavendra Yadav"
 WORKDIR /build/
+ENV HTTP_PROXY=$HTTP_PROXY
+ENV HTTPS_PROXY=$HTTPS_PROXY
 #RUN subscription-manager register --username ${SUBS_USER} --password ${SUBS_PASS} --auto-attach
 # First update the base container to latest versions of everything
 RUN yum update -y
 
 RUN yum install -y bzip2 git
-RUN git clone git://git.openafs.org/openafs.git
-
+RUN if [[ -z "$http_proxy" ]]; then git clone https://github.com/openafs/openafs.git; else git clone git://git.openafs.org/openafs.git; fi
 # Expecting kernel version as an input to the build
 ARG KVER
 # Prep and build the module
