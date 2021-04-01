@@ -56,8 +56,8 @@ IMAGE="${KVC_SOFTWARE_NAME}:${KVC_KVER}"
 
 build_kmod_container() {
     echo "Building ${IMAGE} kernel module container..."
-    [[ !-z $HTTP_PROXY ]] && export http_proxy=$HTTP_PROXY
-    [[ !-z $HTTPS_PROXY ]] && export https_proxy=$HTTPS_PROXY
+    [[ ! -z $HTTP_PROXY ]] && export http_proxy=$HTTP_PROXY
+    [[ ! -z $HTTPS_PROXY ]] && export https_proxy=$HTTPS_PROXY
 
     if [[ -z "$HTTP_PROXY" ]] && [[ -z "$HTTPS_PROXY" ]]; then
 	    kvc_c_build -t ${IMAGE}                              \
