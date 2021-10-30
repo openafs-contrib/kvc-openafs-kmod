@@ -19,4 +19,4 @@ This is a kmods-via-containers implementation for the openafs-kmod. More informa
          ```sh  
         oc create -f mc.yaml
         ```
-
+    5. In case subscription changes repeat from step 2.
